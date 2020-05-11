@@ -4,14 +4,18 @@ const router = Router()
 
 function mapCartItems(cart) {
     return cart.items.map(c => ({
-        ...c.courseId._doc, count: c.count
+        ...c.courseId._doc,
+        id: c.courseId.id,
+        count: c.count
     }))
 }
+
 function computePrice(courses) {
     return courses.reduce((total, course) => {
         return total += course.price * course.count
     }, 0)
 }
+
 router.post('/add', async (req, res) => {
     const course = await Course.findById(req.body.id)
     await req.user.addToCart(course)
